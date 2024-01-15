@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
+}
+.justify-center {
+    justify-content: center;
+}
+.flex {
+    display: flex;
+}
+.px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+.text-sm {
+    font-size: .875rem;
+}
+.text-gray-700 {
+    color: #4a5568;
+}
+.px-3 {
+    padding-left: .75rem;
+    padding-right: .75rem;
+}
+.py-1 {
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+}
+.mr-2 {
+    margin-right: .5rem;
+}
+.font-semibold {
+    font-weight: 600;
+}
+.inline-block {
+    display: inline-block;
+}
+.rounded-full {
+    border-radius: 9999px;
+}
+.bg-gray-200 {
+    background-color: #bbbdbe;
+}
+</style>
+
+
+<div class="container text-center">
+{{lect.drive|safe}}
+
+  </div>
+  <div class="flex justify-center items-center h-screen mt-4 rounded">
+    <div style="min-width: 95%;"  class="rounded overflow-hidden shadow-lg ">
+      <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2">{{lect.title}}</div>
+        <p class="text-gray-700 text-base">
+            {{lect.description}}
+        </p>
+        {% if lect.attachment %}
+        <a href="{{lect.attachment.url}}" class="btn btn-danger" style="margin-top: 10px;">Download Attachment</a>
+        {% endif %}
+        {% if lect.quiz %}
+        <a href="{{lect.quiz|safe}}" target="_blank" class="btn medic-lite" style="margin-top: 10px;">Start Quiz</a>
+        {% endif %}
+      </div>
+
+      <div class="px-6 py-4">
+        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 " style="margin-top: 10px;">
+           #{{ lect.Subject.grade.speciality.sp_name }}
+         </span>
+        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2" style="margin-top: 10px;">#{{ lect.Subject.grade.grade }}  </span>
+        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700" style="margin-top: 10px;">#{{ lect.Subject.subject }}</span>
+      </div>
+    </div>
+</div>
+  <div class="row d-flex justify-content-center " style="margin-top: 40px;">
+    <button class="btn medic-dark rounded w-25" style="padding: 20px;"  onclick="goBack()">
+        <i class="fa fa-arrow-left"></i> Back
+    </button>
+    <script>
+        function goBack() {
+            history.back();
+        }
+    </script>
+     </div></div>
+    </div>
+  <script>
+    // Get the specific li element to hide
+    var liToHide = document.getElementById("depts");
+
+    // Hide the li element
+    liToHide.style.display = "none";
+  </script>
+{% endblock content %}
+

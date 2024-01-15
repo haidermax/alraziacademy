@@ -1,0 +1,29 @@
+<table class="table table-success table-bordered">
+  <thead>
+    <tr class="table-dark">
+      <th>Index</th>
+      <th>Username</th>
+      <th>Full Name</th>
+      <th>State</th>
+     
+
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.first_name }} {{ user.last_name }}</td>
+        <td>
+          {% if user.is_active %}
+            Active
+          {% else %}
+            Blocked
+          {% endif %}
+        </td>
+        
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

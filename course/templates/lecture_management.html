@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <h2>Lecture Management</h2>
+  <hr>
+
+  <form id="lecture-search-form">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="subject" class="form-label">Subject:</label>
+          <select class="form-select" id="subject" name="subject_id">
+            <option value="" {% if not selected_subject_id %}selected{% endif %}>All Subjects</option>
+            {% for dept in depts %}
+              <optgroup style="font-weight: bold; color: green;" label="{{ dept.sp_name }}">
+                {% for grade in grades %}
+                  {% if grade.speciality_id == dept.id %}
+                    <optgroup label="{{ grade.grade }}">
+                      {% for subject in subjects %}
+                        {% if subject.grade_id == grade.id %}
+                          <option value="{{ subject.id }}" {% if selected_subject_id == subject.id %}selected{% endif %}>{{ subject.subject }}</option>
+                        {% endif %}
+                      {% endfor %}
+                    </optgroup>
+                  {% endif %}
+                {% endfor %}
+              </optgroup>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="search_query" class="form-label">Search:</label>
+          <input type="text" class="form-control" id="search_query" name="search_query" value="{{ search_query }}">
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+
+  <hr>
+
+  <div id="lecture-table-container">
+    {% include 'lecture_table.html' %}
+  </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Function to refresh the lectures table
+    function refreshLecturesTable() {
+      var selectedSubjectId = $('#subject').val();
+      var searchQuery = $('#search_query').val();
+
+      // Make the AJAX request to fetch the updated lectures table
+      $.ajax({
+        url: '{% url "lecture_search" %}',
+        method: 'GET',
+        data: { subject_id: selectedSubjectId, search_query: searchQuery },
+        success: function(response) {
+          $('#lecture-table-container').html(response.lecture_table_html);
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+        }
+      });
+    }
+
+    // Handle form submission
+    $('#lecture-search-form').on('submit', function(event) {
+      event.preventDefault();
+      refreshLecturesTable();
+    });
+
+    // Handle subject selection using AJAX
+    $('#subject').on('change', function() {
+      refreshLecturesTable();
+    });
+
+    // Handle remove lecture button click
+    $(document).on('click', '.remove-lecture-button', function() {
+      var lectureId = $(this).data('lecture-id');
+
+      var confirmation = confirm('Are you sure you want to remove this lecture?');
+
+      if (confirmation) {
+        $.ajaxSetup({
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+          }
+        });
+
+        $.ajax({
+          url: '{% url "remove_lecture" %}',
+          method: 'POST',
+          data: { lecture_id: lectureId },
+          success: function(response) {
+            $('#msg').text(response.message); // Set the message text
+          $('#msgs').removeClass('fade').addClass('show'); 
+            refreshLecturesTable();
+          },
+          error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+          }
+        });
+      }
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3 text-center">
+        <img src="{% static 'pics/pay.svg' %}" class="img-fluid" alt="Illustration" width="250">
+        <h3 class=" mt-4">The course </h3> 
+        <h3 class="medic-txt-dark">(( {{subject.subject}} ))</h3><h3> is paid and you need to subscribe first</h3>
+        <h5 class="col-form-label">Please contact the management for the payment process</h5>
+        <div class="mt-4">
+          <i class="fa fa-telegram" aria-hidden="true"></i> @alrazi_22 &nbsp;&nbsp; &nbsp;&nbsp;
+          <i class="fa fa-instagram" aria-hidden="true"></i> @dr.moh22z
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row d-flex justify-content-center " style="margin-top: 20px;">
+    <button class="btn medic-dark rounded w-25" style="padding: 20px;"  onclick="goBack()">
+   <i class="fa fa-arrow-left"></i> Back
+ </button>
+ <script>
+   function goBack() {
+       history.back();
+   }
+ </script>
+   </div></div>
+</div>
+<script>
+    // Get the specific li element to hide
+    var liToHide = document.getElementById("depts");
+  
+    // Hide the li element
+    liToHide.style.display = "none";
+  </script>
+{% endblock content %}
+
+

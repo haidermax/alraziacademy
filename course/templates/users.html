@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container  rounded-1">
+    <h1>User Management</h1>
+    <div class="mb-3 w-50">
+      <label for="searchQuery" class="form-label ">Search Users:</label>
+      <div class="input-group">
+        <input type="text" class="form-control " id="searchQuery">
+        <button class="btn medic-lite" id="searchButton">Search</button>
+      </div>
+    </div>
+  
+    <div id="userTableContainer" class="rounded-1 mt-4">
+      <table class="table table-success table-bordered">
+        <thead>
+          <tr class="table-dark">
+            <th>Index</th>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>State</th>
+           
+
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.first_name }} {{ user.last_name }}</td>
+              <td>
+                {% if user.is_active %}
+                  Active
+                {% else %}
+                  Blocked
+                {% endif %}
+              </td>
+              
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Search users on button click
+      $('#searchButton').click(function() {
+        var searchQuery = $('#searchQuery').val();
+        searchUsers(searchQuery);
+      });
+    });
+  
+    function searchUsers(query) {
+      $.ajax({
+        url: '{% url "search_users" %}',
+        method: 'GET',
+        data: { search_query: query },
+        success: function(response) {
+          $('#userTableContainer').html(response);
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+        }
+      });
+    }
+  </script>
+    <div class="row d-flex justify-content-center " style="margin-top: 20px;">
+        <button class="btn medic-dark rounded w-25" style="padding: 20px;"  onclick="goBack()">
+       <i class="fa fa-arrow-left"></i> Back
+     </button>
+     <script>
+       function goBack() {
+           history.back();
+       }
+     </script>
+       </div></div>
+    </div>
+    <script>
+        // Get the specific li element to hide
+        var liToHide = document.getElementById("depts");
+      
+        // Hide the li element
+        liToHide.style.display = "none";
+      </script>
+{% endblock %}

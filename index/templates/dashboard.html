@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+        body .container {
+          display: flex;
+          justify-content:  space-around;
+          align-items: center;
+          flex-wrap: wrap;
+          max-width: 800px;
+          
+        }
+.card {
+  --font-color: #323232;
+  width: 300px;
+  height: 200px;
+
+background: #16D480;
+background: linear-gradient(135deg, #6fffbe, #b4f4ff);;
+  box-shadow: -1px 1px 4px #5a5a5a,
+              9px -9px 12px #ffffff;
+  display: flex;
+  flex-direction: column;
+  transition: .4s;
+  position: relative;
+  margin: 10px;
+}
+
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 0px 7px 2px #5a5a5a;
+}
+
+
+
+.card__descr-wrapper {
+  padding: 15px;
+  display: grid;
+}
+
+.card__title {
+  color: var(--font-color);
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.card__descr {
+  color: var(--font-color);
+}
+
+
+.card__links {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-self: flex-end;
+}
+
+.card__links .link {
+  color: var(--font-color);
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.card__links .link:hover {
+  text-decoration: none;
+}
+
+</style>
+<div class="container">
+
+    <!-- accounts management -->
+    <div class="card">
+        <div class="card__descr-wrapper">
+          <p class="card__title">
+            <i class="fa fa-user-circle" aria-hidden="true"></i>
+          Accounts management
+        </p>
+        <p class="card__descr">
+          You can manage your app user directly from here
+        </p>
+        <div class="card__links">
+            <div class=" btn btn-secondary" >
+              <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+            <a class="link text-white" href="{% url 'subject_members' %}">Subscribe</a>
+          </div>
+          <div class="btn medic-dark">
+            <i class="fa fa-tasks" aria-hidden="true"></i>
+            <a class="link" href="{% url 'user_management' %}">View users</a>
+          </div>
+        </div>
+        </div>
+      </div>
+
+          <!-- Speciality management -->
+    <div class="card">
+        <div class="card__descr-wrapper">
+          <p class="card__title">
+            <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+          Departments
+        </p>
+        <p class="card__descr">
+          This section to manage App Departments
+        </p>
+        <div class="card__links d-flex justify-content-center">
+            <div class=" btn btn-secondary" >
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            <a class="link text-white" href="{% url 'create_speciality' %}">New</a>
+          </div>
+
+        </div>
+        </div>
+      </div>
+
+              <!-- Subjects management -->
+              <div class="card">
+                <div class="card__descr-wrapper">
+                  <p class="card__title">
+                    <i class="fa fa-book" aria-hidden="true"></i>
+                  Subjects Management
+                </p>
+                <p class="card__descr">
+                  management of Subject in each grade
+                </p>
+                <div class="card__links d-flex justify-content-center">
+                    <div class=" btn btn-secondary" >
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <a class="link text-white" href="{% url 'create_subject' %}">New</a>
+                  </div>
+                  <div class=" btn medic-lite" style="margin-left: 13%;" >
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <a class="link text-dark " href="{% url 'subject_management' %}">Manage</a>
+                  </div>
+                </div>
+                </div>
+              </div>
+
+                            <!-- lectures management  -->
+                            <div class="card">
+                                <div class="card__descr-wrapper">
+                                  <p class="card__title">
+                                    <i class="fa fa-file-video-o" aria-hidden="true"></i>
+                                  Lectures management
+                                </p>
+                                <p class="card__descr">
+                                 Lectures details controlling and managing
+                                </p>
+                                <div class="card__links d-flex justify-content-center">
+                                    <div class=" btn btn-secondary" >
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                    <a class="link text-white" href="{% url 'create_lecture' %}">New</a>
+                                  </div>
+                                  <div class=" btn medic-lite" style="margin-left: 13%;" >
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                    <a class="link text-dark " href="{% url 'lecture_management' %}">Manage</a>
+                                  </div>
+                                </div>
+                                </div>
+
+                              </div>
+                             </div> 
+     <!-- cards end -->
+
+     <div class="row d-flex justify-content-center " style="margin-top: 40px;">
+      <button class="btn medic-dark rounded w-100" style="padding: 20px;"  onclick="goBack()">
+          <i class="fa fa-arrow-left"></i> Back
+      </button>
+      <script>
+          function goBack() {
+              history.back();
+          }
+      </script>
+       </div></div>
+      </div>
+    <script>
+      // Get the specific li element to hide
+      var liToHide = document.getElementById("depts");
+    
+      // Hide the li element
+      liToHide.style.display = "none";
+    </script>
+{% endblock content %}
+

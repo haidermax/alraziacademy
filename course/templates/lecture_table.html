@@ -1,0 +1,29 @@
+{% if lectures %}
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Title</th>
+                   <th>Attachment</th>
+                   <th>Quiz</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for lecture in lectures %}
+          <tr>
+            <td>{{ lecture.title }}</td>
+            <td>{% if lecture.Attachment %} <span style="color: green;">Yes</span> {% else %} <span style="color: red;">No</span> {% endif %} </td>
+            <td>{% if lecture.quiz %} <span style="color: green;">Yes</span> {% else %} <span style="color: red;">No</span> {% endif %} </td>
+            <td>
+              <a href="{% url 'edit_lecture' lecture.id %}" class="btn btn-sm btn-primary">Edit</a>
+              <button class="btn btn-sm btn-danger remove-lecture-button" data-lecture-id="{{ lecture.id }}">Remove</button>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p>No lectures found.</p>
+{% endif %}

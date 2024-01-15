@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- <div class="container">
+            <div class="d-flex justify-content-center row">
+                <div class="col-md-8">
+                    <div class="d-flex flex-row justify-content-between align-items-center p-2 bg-white mt-4 px-3 rounded">
+                        <div class="d-flex flex-column align-items-center product-details"><span class="font-weight-bold">{{sub.subject}}</span>
+
+                        </div>
+
+                        <div>
+                            {% if sub.paid %}
+                            <h5 class="text-grey justify-content-left">Price: <span style="color:teal;">{{ sub.price }} IQD</span></h5>
+                            {% else %}
+                            <h5 class="text-grey"> Price: <span style="color:red;">Free</span></h5>
+                            {% endif %}
+                        </div>
+                        <a href="#" style="text-decoration: none;"> <div class="d-flex align-items-center " ><i class="fa fa-play" aria-hidden="true"></i> &nbsp; Enroll</div> </a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <style>
+
+        </style>
+        <div class="container ">
+
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Login Required</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          You must login before you watch courses
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn medic-dark" data-bs-dismiss="modal">OK</button>
+          <a href="{% url 'login' %}" class="btn " style="background-color: lightgrey;">Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+            
+            {% if sub %}
+            {% for sub in sub %}
+            <div class="row  d-flex justify-content-center" style="margin-top: 20px;">
+                {% if user.is_authenticated %}
+                <a href=" {% url 'subject' grade sub.pk %} " class="col-md-6 " style="text-decoration: none;color: black;">
+                    {% else %}
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="col-md-6 " style="text-decoration: none;color: black;">
+                        {% endif %}
+                    <div class="rounded section-card d-flex grey lighten-4 justify-space-between align-center">
+                        <div class="card-body d-flex align-items-center " >
+                            <div class="w-75 " style="height: 100%;padding: 15px;margin: 0;background-color:#586979;padding: 25px;">
+                                <h5 class="section-name nowrap text-white" style="font-size: medium;" >{{sub.subject}}</h5>
+                                </div>
+                                {% if sub.paid %}
+                                <div class="w-50 text-center " style="height: 100%;padding: 25px;margin: 0;background-color: #5ab1a6;">
+                                   {{sub.price}} IQD
+                                </div>
+                            {% else %}
+                            <div class="w-50 text-center text-white" style="height: 100%;padding: 15px;margin: 0;background-color: #5ab1a6;font-size: x-large;font-weight: 400;">
+                                Free
+                             </div>
+                            {% endif %}
+                            
+                        </div>
+                    </div>
+                </a>
+                <!-- Add more cards for each subject -->
+            </div>
+            {% endfor %}
+
+            {% else %}
+        </div>
+            <div class="column">
+                
+            <div href="#" class="row  d-flex justify-content-center " style="text-decoration: none;color: black;margin-top: 20px; font-size: xx-large;">
+            {{grade}} has no subjects yet
+            </div></div>
+           {% endif %}
+           
+
+           <div class="row d-flex justify-content-center " style="margin-top: 20px;">
+                 <button class="btn medic-dark rounded w-25" style="padding: 20px;"  onclick="goBack()">
+                <i class="fa fa-arrow-left"></i> Back
+              </button>
+              <script>
+                function goBack() {
+                    history.back();
+                }
+              </script>
+                </div></div>
+            </div>
+        </div>
+
+        <script>
+            // Get the specific li element to hide
+            var liToHide = document.getElementById("depts");
+          
+            // Hide the li element
+            liToHide.style.display = "none";
+          </script>
+{% endblock content %}

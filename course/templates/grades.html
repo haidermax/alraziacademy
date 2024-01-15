@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .anm{
+        background-color: white;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+          transition: 0.5s;
+          color:black;
+    }
+    .anm:hover{
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+          background: #fff;
+          background-color: #5ab1a6;
+          color:white;
+          transition: 0.2s;
+    }
+</style>
+
+<div class=" container-fluid" style="background-color: lightgrey;padding: 15px;border-radius: 10px;">
+  <section id="minimal-statistics">
+    <div class="row">
+      <div class="col-12 mt-3 mb-1">
+        <h4 class="text-uppercase" style="color: rgb(28, 28, 28);font-weight: 600;">List of Grades:</h4>
+
+      </div>
+    </div>
+    <div class="row" style="padding-left:unset;">
+        {% for grade in grade %}
+        
+  
+
+      <div class=" col anm" style="border-radius: 10px; margin: 10px; min-width: 90%;"> 
+        <a href=" {% url 'grade' grade.speciality grade.grade %} " style="text-decoration: none;font-size: medium;">
+        <div class="card" style="border: none; background-color: transparent;">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <i class="icon-pencil primary font-large-2 float-left"></i>
+                </div>
+                <div class="media-body text-right">
+                  <h3 style="font-size: large;">          <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                    {{ grade.grade }}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div></a>
+      </div>
+    
+    {% endfor %}
+
+
+
+    </div>
+
+    
+
+</section>
+</div>
+<div>
+    <img src="{% static 'pics/grad.jpg' %}" alt="graduate" style="width: 100%;">
+  </div>
+{% endblock content %}

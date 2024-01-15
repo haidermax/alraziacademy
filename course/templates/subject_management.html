@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <h2 class="medic-txt-dark">Subject Management</h2>
+  <hr>
+
+  <form method="get" action="{% url 'subject_management' %}">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="grade" class="form-label">Grade:</label>
+          <select class="form-select" id="grade" name="grade_id">
+            <!-- Render the grade options here -->
+            {% for grade in grades %}
+              <option value="{{ grade.id }}" {% if grade.id == grade_id %}selected{% endif %}>{{ grade.grade }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="search_query" class="form-label">Search:</label>
+          <input type="text" class="form-control" id="search_query" name="search_query" value="{{ search_query }}">
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-success">Search</button>
+  </form>
+
+  <hr>
+
+  {% if subjects %}
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Paid</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for subject in subjects %}
+            <tr>
+              <td><a href="{% url 'subject' subject.grade subject.id %}" class=" btn-sm btn-info" style="text-decoration: none;">{{ subject.subject }}</a></td>
+              <td>{% if subject.paid %}Yes{% else %}No{% endif %}</td>
+              <td>{{ subject.price }}</td>
+              <td>
+                <a href="{% url 'edit_subject' subject.id %}" class="btn btn-sm medic-lite">Edit</a>
+                <button class="btn btn-sm btn-danger remove-subject-button" data-subject-id="{{ subject.id }}">Remove</button>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p>No subjects found.</p>
+  {% endif %}
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Handle remove subject button click
+    $(document).on('click', '.remove-subject-button', function() {
+      var subjectId = $(this).data('subject-id');
+
+      // Display confirmation dialog before removing subject
+      var confirmation = confirm('Are you sure you want to remove this subject?');
+
+      if (confirmation) {
+        // Add the CSRF token to the AJAX request headers
+        $.ajaxSetup({
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+          }
+        });
+
+        // Make the AJAX request to remove the subject
+        $.ajax({
+          url: '{% url "remove_subject" %}',
+          method: 'POST',
+          data: { subject_id: subjectId },
+          success: function(response) {
+            // Handle the response or refresh the subjects table if needed
+
+            window.location.reload();
+
+          },
+          error: function(xhr, status, error) {
+            console.error(xhr.responseText); // Log any errors to the console
+          }
+        });
+      }
+    });
+  });
+</script> 
+<script>
+
+     // Get the specific li element to hide
+     var liToHide = document.getElementById("depts");
+   
+     // Hide the li element
+     liToHide.style.display = "none";
+   </script>
+    <div class="row d-flex justify-content-center " style="margin-top: 20px;">
+      <a href="{% url 'dashboard' %}" class="btn medic-dark " style="padding: 20px;width: 120px;" ">
+     <i class="fa fa-arrow-left"></i> Back
+      </a>
+
+     </div></div>
+  </div>
+  <script>
+      // Get the specific li element to hide
+      var liToHide = document.getElementById("depts");
+    
+      // Hide the li element
+      liToHide.style.display = "none";
+    </script>
+
+{% endblock content %}

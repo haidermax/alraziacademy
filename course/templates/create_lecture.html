@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container rounded-1" style="max-width: 400px; margin: 0 auto; background-color: #F8F8F8; padding: 20px;">
+    <h1 style="color: black;">Create Lecture</h1>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="subject" style="color: #5ab1a6;">Subject:</label>
+        <select class="form-control" id="subject" name="subject">
+          <option value="" selected disabled>Select a subject</option>
+          {% for dept in depts %}
+            <optgroup style="color: chocolate;" label="{{ dept.sp_name }}">
+              
+              {% for grade in grades %}
+                {% if grade.speciality_id == dept.id %}
+                  <optgroup label="{{ grade.grade }}">
+                    {% for subject in subjects %}
+                      {% if subject.grade_id == grade.id %}
+                        <option class="medic-txt-dark"  value="{{ subject.id }}">{{ subject.subject }}</option>
+                      {% endif %}
+                    {% endfor %}
+                    <option disabled> </option>
+                  </optgroup>
+                {% endif %}
+                
+              {% endfor %}
+              <option disabled> </option>
+              <option disabled>--------------------------</option>
+              <option disabled> </option>
+            </optgroup>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="title" style="color: #65c5b9;">Title:</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+      </div>
+      <div class="mb-3">
+        <label for="description" style="color: #5ab1a6;">Description:</label>
+        <textarea class="form-control" id="description" name="description" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="attachment" style="color: #5ab1a6;">Attachment:</label>
+        <input type="file" class="form-control" id="attachment" name="attachment">
+      </div>
+      <div class="mb-3">
+        <label for="drive" style="color: #5ab1a6;">Drive:</label>
+        <input type="text" class="form-control" id="drive" name="drive" required>
+      </div>
+      <div class="mb-3">
+        <label for="quiz" style="color: #5ab1a6;">Quiz:</label>
+        <input type="url" class="form-control" id="quiz" name="quiz" >
+      </div>
+      <button type="submit" style="margin-bottom: 20px; padding: 10px; background-color: #5ab1a6; color: white; border: none;">Create</button>
+    </form>
+  </div>
+    <div class="row d-flex justify-content-center " style="margin-top: 20px;">
+      <button class="btn medic-dark rounded w-25" style="padding: 20px;"  onclick="goBack()">
+     <i class="fa fa-arrow-left"></i> Back
+   </button>
+   <script>
+     function goBack() {
+         history.back();
+     }
+   </script>
+     </div></div>
+  </div>
+  <script>
+      // Get the specific li element to hide
+      var liToHide = document.getElementById("depts");
+    
+      // Hide the li element
+      liToHide.style.display = "none";
+    </script>
+
+{% endblock %}

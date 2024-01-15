@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class=" " style="min-width: 50%;margin: auto;padding: 10px;box-shadow: 3px 3px 13px rgb(144, 144, 144);border-radius: 10px;border: solid grey;">
+<div class="container" >
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label for="subject" class="form-label medic-txt-dark">Subject:</label>
+        <select class="form-select" id="subject" name="subject" >
+          <option value="" selected disabled>Select a subject</option>
+          {% for dept in depts %}
+            <optgroup label="{{ dept.sp_name }} " class="medic-txt-dark">
+              {% for grade in grades %}
+                {% if grade.speciality_id == dept.id %}
+                  <optgroup label="{{ grade.grade }}" >
+                    {% for subject in subjects %}
+                      {% if subject.grade_id == grade.id %}
+                        <option value="{{ subject.id }}">{{ subject.subject }}</option>
+                      {% endif %}
+                    {% endfor %}
+                  </optgroup>
+                {% endif %}
+              {% endfor %}
+            </optgroup>
+            <option disabled></option> <!-- Add an empty line between each department -->
+          {% endfor %}
+        </select>
+        <button class="btn  mt-2 medic-dark" id="addMemberButton" data-bs-toggle="modal" data-bs-target="#addMemberModal">Add Member</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="membersTableContainer">
+    <!-- Table will be dynamically loaded here -->
+  </div>
+</div>
+
+<!-- Add Member Modal -->
+<div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addMemberModalLabel">Add Member</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label for="memberName" class="form-label medic-txt-dark">Username:</label>
+        <input type="text" class="form-control" id="memberName">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn medic-lite" id="addMemberSubmit">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Initialize the subject select element
+    $('#subject').val('').trigger('change');
+
+    $('#subject').change(function() {
+      var subjectId = $(this).val();
+
+      // Clear previous table contents
+      $('#membersTableContainer').empty();
+
+      if (subjectId) {
+        $.ajax({
+          url: '{% url "get_members_table" %}',
+          method: 'GET',
+          data: { subject_id: subjectId },
+          success: function(response) {
+            var membersTable = response.members_table;
+            $('#membersTableContainer').html(membersTable);
+          }
+        });
+      }
+    });
+
+    // Handle add member form submission
+    $('#addMemberSubmit').click(function() {
+      var memberName = $('#memberName').val();
+      var subjectId = $('#subject').val();
+
+      // Perform validation or further processing as needed
+
+      // Add the CSRF token to the AJAX request headers
+      $.ajaxSetup({
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}'
+        }
+      });
+
+      // Make the AJAX request to add the member
+      $.ajax({
+        url: '{% url "add_member" %}',
+        method: 'POST',
+        data: { member_name: memberName, subject_id: subjectId },
+        success: function(response) {
+          // Handle the response or refresh the members table if needed
+          $('#addMemberModal').modal('hide'); // Close the modal
+          $('#membersTableContainer').empty(); // Clear previous table contents
+          $('#subject').trigger('change'); // Refresh the members table
+          $('#memberName').val('');
+          $('#msg').text(response.message); // Set the message text
+          $('#msgs').addClass('show').removeClass('fade'); 
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText); // Log any errors to the console
+        }
+      });
+    });
+
+    // Handle remove member button click
+    $(document).on('click', '.removeMemberButton', function() {
+      var memberId = $(this).data('member-id');
+      var memberName = $(this).data('member-name');
+      var subjectId = $('#subject').val();
+
+      // Display confirmation dialog before removing member
+      var confirmation = confirm('Are you sure you want to remove ' + memberName + ' from the members?');
+
+      if (confirmation) {
+        // Add the CSRF token to the AJAX request headers
+        $.ajaxSetup({
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+          }
+        });
+
+        // Make the AJAX request to remove the member
+        $.ajax({
+          url: '{% url "remove_member" %}',
+          method: 'POST',
+          data: { member_id: memberId, subject_id: subjectId },
+          success: function(response) {
+            // Handle the response or refresh the members table if needed
+            $('#membersTableContainer').empty(); // Clear previous table contents
+            $('#subject').trigger('change'); // Refresh the members table
+            $('#msg').text(response.message); // Set the message text
+          $('#msgs').addClass('show').removeClass('fade'); 
+          },
+          error: function(xhr, status, error) {
+            console.error(xhr.responseText); // Log any errors to the console
+          }
+        });
+      }
+    });
+  });
+</script>
+<div class="row d-flex justify-content-center " style="margin-top: 20px;">
+  <button class="btn medic-dark rounded w-25" style="padding: 20px;"  onclick="goBack()">
+ <i class="fa fa-arrow-left"></i> Back
+</button>
+<script>
+ function goBack() {
+     history.back();
+ }
+</script>
+ </div></div>
+</div>
+<script>
+  // Get the specific li element to hide
+  var liToHide = document.getElementById("depts");
+
+  // Hide the li element
+  liToHide.style.display = "none";
+</script>
+</div>
+{% endblock %}

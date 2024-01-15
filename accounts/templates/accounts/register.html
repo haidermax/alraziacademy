@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block title %}Registration{% endblock title %}
+
+{% block content %}
+
+
+
+  <main>
+    <div class="container">
+
+
+      <div class="row  align-items-center">
+          <div class="">
+              <div class="text-center text-xxl-start">
+                  <div class="fs-3 fw-light text-muted">Welcome To </div>
+                  <h1 class="display-3 fw-bolder"><span class="medic-txt-dark d-inline">Al-Razi Academy</span></h1>
+
+              </div>
+          </div>
+      </div>
+  
+
+<section class="section register  d-flex flex-column align-items-center justify-content-center py-4">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+        
+
+        <div class="card mb-3 ">
+
+          <div class="card-body ">
+
+                  <div class="pt-4 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
+                    <p class="text-center small">Enter your personal details to create account</p>
+                  </div>
+
+                  <form method="post" class="row g-3 needs-validation" novalidate>
+                      {% csrf_token %}
+                    <div class="col-12">
+                      <label for="yourName" class="form-label medic-txt-dark">First Name</label>
+                        {{ form.first_name.errors }}
+                        {% render_field form.first_name class="form-control" required="" %}
+                    </div>
+
+                      <div class="col-12">
+                      <label for="yourName" class="form-label medic-txt-dark">Last Name</label>
+                          {{ form.last_name.errors }}
+                        {% render_field form.last_name class="form-control" required="" %}
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourEmail" class="form-label medic-txt-dark">Your Email</label>
+                        {{ form.email.errors }}
+                        {% render_field form.email class="form-control" required="" %}
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourUsername" class="form-label medic-txt-dark">Username</label>
+                      {{ form.username.errors }}
+                      <div class="input-group has-validation">
+                        <span class="input-group-text" id="inputGroupPrepend">@</span>
+                        {% render_field form.username class="form-control" required="" %}
+                      </div>
+                      <p id="username-availability" class="small mb-0"></p>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourPassword" class="form-label medic-txt-dark">Password</label>
+                        {{ form.password1.errors }}
+                        {% render_field form.password1 class="form-control" required="" %}
+                    </div>
+
+                      <div class="col-12">
+                      <label for="yourPassword" class="form-label medic-txt-dark">Re-type Password</label>
+                          {{ form.password2.errors }}
+                        {% render_field form.password2 class="form-control" required="" %}
+                    </div>
+
+                      <div class="col-12">
+                          <label id="id_captcha_1" class="form-label medic-txt-dark">Captcha</label>
+                          {{ cform.captcha.errors }}
+                          {% render_field cform.captcha class="form-control" %}
+                          {% render_field cform.captcha_0 class="form-control" %}
+                          {% render_field cform.captcha_1 class="form-control" %}
+
+                    </div>
+
+
+                    <div class="col-12">
+                      <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                    </div>
+                    <div class="col-12">
+                      <p class="small mb-0">Already have an account? <a class="medic-txt-dark" href="{% url 'login' %}" style="text-decoration: none;">Log in</a></p>
+                    </div>
+                  </form>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main><!-- End #main -->
+  <script>
+    // Get the specific li element to hide
+    var liToHide = document.getElementById("depts");
+  
+    // Hide the li element
+    liToHide.style.display = "none";
+  </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      var usernameField = $('#id_username');
+      var availabilityLabel = $('#username-availability');
+    
+      usernameField.on('input', function() {
+        var username = $(this).val();
+        if (username !== '' && username.length >= 3) {
+          checkUsernameAvailability(username);
+        } else {
+          availabilityLabel.text('');
+        }
+      });
+    
+      function checkUsernameAvailability(username) {
+        $.ajax({
+          url: "{% url 'check_username_availability' %}",
+          data: { 'username': username },
+          success: function(data) {
+            if (data.is_taken) {
+              availabilityLabel.text('This username is taken').css('color', 'red');
+            } else {
+              availabilityLabel.text('This username is available').css('color', 'green');
+            }
+          }
+        });
+      }
+    });
+    </script>
+    
+{% endblock content %}

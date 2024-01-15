@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container rounded-1" style="max-width: 400px; margin: 0 auto; background-color: white;">
+  <h1 class="medic-txt-dark">Edit Subject</h1>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="grade">Grade</label>
+      <select class="form-control" id="grade" name="grade">
+        <!-- Render options dynamically -->
+        {% for grade in grades %}
+          <option value="{{ grade.id }}" {% if grade.id == subject.grade.id %}selected{% endif %}>{{ grade.grade }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="subject">Subject</label>
+      <input type="text" class="form-control" id="subject" name="subject" value="{{ subject.subject }}">
+    </div>
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" id="paid" name="paid" {% if subject.paid %}checked{% endif %}>
+      <label class="form-check-label" for="paid">Paid</label>
+    </div>
+    <div class="mb-3">
+      <label for="price">Price</label>
+      <input type="number" class="form-control" id="price" name="price" value="{{ subject.price }}" {% if not subject.paid %}disabled{% endif %}>
+    </div>
+    <button type="submit" style="margin-bottom: 20px;padding: 10px;" class="btn medic-lite">Update</button>
+  </form>
+</div>
+
+<script>
+  // Get the checkbox and price field elements
+  var paidCheckbox = document.getElementById('paid');
+  var priceField = document.getElementById('price');
+
+  // Add event listener to the checkbox
+  paidCheckbox.addEventListener('change', function() {
+    if (this.checked) {
+      priceField.disabled = false;  // Enable price field
+    } else {
+      priceField.disabled = true;   // Disable price field
+      priceField.value = 0;         // Reset price field value to 0
+    }
+  });
+</script>
+<div class="row d-flex justify-content-center " style="margin-top: 40px;">
+    <button class="btn medic-dark rounded " style="width: 140px;padding: 20px;"  onclick="goBack()">
+        <i class="fa fa-arrow-left"></i> Back
+    </button>
+    <script>
+        function goBack() {
+            history.back();
+        }
+    </script>
+     </div></div>
+    </div>
+  <script>
+    // Get the specific li element to hide
+    var liToHide = document.getElementById("depts");
+  
+    // Hide the li element
+    liToHide.style.display = "none";
+  </script>
+{% endblock %}
